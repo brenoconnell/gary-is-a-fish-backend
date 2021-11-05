@@ -142,5 +142,22 @@
         "shopCountry": "Ireland",
         "shopLocation": "Stillorgan",
         "volume": 750
+    },
+    {
+        "alcoholContent": 5.6,
+        "beverageType": "Beer",
+        "brand": "Brewdog",
+        "brandBeverageName": "Punk IPA",
+        "currency": "EUR",
+        "garyScore": 1.4215384615384612,
+        "id": "WAtZgkfGOi",
+        "inputTime": "Wed Oct 20 2021 13:08:42 GMT+0100 (Irish Standard Time)",
+        "multipack": false,
+        "numInMultipack": "4",
+        "price": 13,
+        "shop": "Tesco",
+        "shopCountry": "Ireland",
+        "shopLocation": "Monkstown",
+        "volume": 330
     }
 ]
