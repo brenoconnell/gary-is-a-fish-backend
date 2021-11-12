@@ -1,16 +1,22 @@
 from flask import Flask, jsonify, request
 import json
 from flask_cors import CORS, cross_origin
+from pymongo import MongoClient
 
 app = Flask(__name__)
 CORS(app)
 
+client = MongoClient("mongodb+srv://test:test@gary-sandbox.b1jde.mongodb.net/test\%5fdrink?retryWrites=true&w=majority&authSource=admin")
+db = client.test_drink
+
 @app.route("/drink", methods=['GET'])
 def get_all_drinks():
-    f = open('allDrinks.json',)
-    allDrinks = json.load(f)
-    f.close()
-    resp = jsonify(allDrinks)
+    # f = open('allDrinks.json',)
+    # allDrinks = json.load(f)
+    # f.close()
+    documents = db.drinks.find()
+    output = [{item: data[item] for item in data if item != '_id'} for data in documents]
+    resp = jsonify(output)
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -38,22 +44,24 @@ def get_drink_by_id(id):
 @app.route("/drink", methods=['POST'])
 def post_new_drink():
     content = request.get_json(force=True)
-    json_object = json.dumps(content, indent = 4)
+    # json_object = json.dumps(content, indent = 4)
 
-    fin = open("allDrinks.json", "rt")
-    data = fin.read()
-    data = data.replace(']', '')
-    fin.close()
+    # fin = open("allDrinks.json", "rt")
+    # data = fin.read()
+    # data = data.replace(']', '')
+    # fin.close()
 
-    fin = open("allDrinks.json", "wt")
-    fin.write(data)
-    fin.close()
+    # fin = open("allDrinks.json", "wt")
+    # fin.write(data)
+    # fin.close()
 
-    with open("allDrinks.json", "a+") as outfile:
-        outfile.write(",\n" + json_object + "\n]")
-    outfile.close()
+    # with open("allDrinks.json", "a+") as outfile:
+    #     outfile.write(",\n" + json_object + "\n]")
+    # outfile.close()
 
-    resp = jsonify( {"status": 200, "message": "OK"} )
+    result = db.drink.insert_one(content)
+
+    resp = jsonify( {"status": 200, "message": f"OK - New ID: {result.inserted_id}"} )
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
