@@ -3,13 +3,18 @@ import json
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 
+from credentials import username, pwd, dbname
+
 app = Flask(__name__)
 CORS(app)
 
-client = MongoClient("mongodb+srv://test:test@gary-sandbox.b1jde.mongodb.net/test\%5fdrink?retryWrites=true&w=majority&authSource=admin")
+mongoURI = f"mongodb+srv://{username}:{pwd}@gary-sandbox.b1jde.mongodb.net/{dbname}?retryWrites=true&w=majority&authSource=admin"
+
+client = MongoClient(mongoURI)
 db = client.test_drink
 
 @app.route("/drink", methods=['GET'])
+@cross_origin(origin='http://localhost:3000')
 def get_all_drinks():
     documents = db.drinks.find()
     output = [{item: data[item] for item in data if item != '_id'} for data in documents]
@@ -18,6 +23,7 @@ def get_all_drinks():
     return resp
 
 @app.route("/drink/<id>", methods=['GET'])
+@cross_origin(origin='http://localhost:3000')
 def get_drink_by_id(id):
     
     document = db.drinks.find_one({"id": id})
@@ -28,12 +34,13 @@ def get_drink_by_id(id):
     return resp
 
 @app.route("/drink", methods=['POST'])
+@cross_origin(origin='http://localhost:3000')
 def post_new_drink():
     content = request.get_json(force=True)
 
     result = db.drinks.insert_one(content)
 
-    resp = jsonify( {"status": 200, "message": f"OK - New ID: {result.inserted_id}"} )
+    resp = jsonify( {"status": 200, "message": "OK"} )
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
