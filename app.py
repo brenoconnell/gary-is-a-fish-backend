@@ -1,14 +1,13 @@
 from flask import Flask, jsonify, request
-import json
 from flask_cors import CORS, cross_origin
 from pymongo import MongoClient
 
-import credentials
+from credentials import Credentials
 
 app = Flask(__name__)
 CORS(app)
 
-creds = credentials.Credentials.get_creds()
+creds = Credentials.get_creds()
 
 mongoURI = f"mongodb+srv://{creds[0]}:{creds[1]}@gary-sandbox.b1jde.mongodb.net/{creds[2]}?retryWrites=true&w=majority&authSource=admin"
 
