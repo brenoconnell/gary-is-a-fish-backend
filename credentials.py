@@ -5,4 +5,3 @@ class Credentials:
         pwd=""
         dbname=""
         return (username, pwd, dbname)
-
